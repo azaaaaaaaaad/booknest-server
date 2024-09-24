@@ -3,12 +3,17 @@ import connectDB from '../../lib/mongodb';
 import Book from '../../models/Book';
 
 export default async function handler(req, res) {
-  await connectDB();
+  try {
+    await connectDB();
+  } catch (error) {
+    console.error('Database connection error:', error);
+    return res.status(500).json({ error: 'Database connection error' });
+  }
 
   if (req.method === 'GET') {
     try {
       console.log('Fetching books...');
-      const books = await Book.find({}); // Fetches documents from the "books" collection
+      const books = await Book.find({});
       console.log('Books fetched:', books);
       res.status(200).json(books);
     } catch (error) {
