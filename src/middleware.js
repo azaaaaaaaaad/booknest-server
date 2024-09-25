@@ -1,43 +1,29 @@
-import { NextResponse } from 'next/server'
- 
-const allowedOrigins = ["*"]
- 
-const corsOptions = {
-  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-  'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-  'Access-Control-Allow-Origin' : '*'
-}
- 
+import { NextResponse } from "next/server";
+
+const allowedOrigins = ["http://localhost:3000", "https://booknest-self.vercel.app"]; // Adjust for production
+
 export function middleware(request) {
-  // Check the origin from the request
-  const origin = request.headers.get('origin') ?? ''
-  const isAllowedOrigin = allowedOrigins.includes(origin)
- 
-  // Handle preflighted requests
-  const isPreflight = request.method === 'OPTIONS'
- 
+  const origin = request.headers.get("origin") ?? "";
+  const isPreflight = request.method === "OPTIONS";
+
+  // Handle preflight requests
   if (isPreflight) {
-    const preflightHeaders = {
-      ...(isAllowedOrigin && { 'Access-Control-Allow-Origin': origin }),
-      ...corsOptions,
-    }
-    return NextResponse.json({}, { headers: preflightHeaders })
+    const response = NextResponse.next();
+    response.headers.set("Access-Control-Allow-Origin", origin);
+    response.headers.set("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    response.headers.set("Access-Control-Allow-Headers", "Content-Type, Authorization");
+    return response;
   }
- 
-  // Handle simple requests
-  const response = NextResponse.next()
- 
-  if (isAllowedOrigin) {
-    response.headers.set('Access-Control-Allow-Origin', origin)
+
+  // Handle normal requests
+  const response = NextResponse.next();
+  if (allowedOrigins.includes(origin)) {
+    response.headers.set("Access-Control-Allow-Origin", origin);
   }
- 
-  Object.entries(corsOptions).forEach(([key, value]) => {
-    response.headers.set(key, value)
-  })
- 
-  return response
+
+  return response;
 }
- 
+
 export const config = {
-  matcher: '/api/:path*',
-}
+  matcher: "/api/:path*",
+};
