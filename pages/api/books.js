@@ -1,11 +1,11 @@
 
-import corsMiddleware from "@/app/lib/corsMiddleware";
+import { CorsMiddleware } from "@/corsMiddleware";
 import connectDB from "../../lib/mongodb";
 import Book from "../../models/Book";
 
 export default async function handler(req, res) {
   // Run the CORS middleware
-  await corsMiddleware(req, res);
+  await CorsMiddleware(req, res);
 
   // Connect to the database
   try {
