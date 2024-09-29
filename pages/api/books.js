@@ -1,4 +1,4 @@
-import { corsMiddleware } from "@/corsMiddleware";
+import { CorsMiddleware } from "@/CorsMiddleware";
 import connectDB from "../../lib/mongodb";
 import Book from "../../models/Book";
 
