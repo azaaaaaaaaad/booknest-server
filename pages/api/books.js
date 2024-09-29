@@ -1,7 +1,6 @@
-
 import { CorsMiddleware } from "@/corsMiddleware";
 import connectDB from "../../lib/mongodb";
-import Book from "../../models/Book";
+import { Book } from "../../models/Book";
 
 export default async function handler(req, res) {
   // Run the CORS middleware
@@ -20,7 +19,7 @@ export default async function handler(req, res) {
     try {
       console.log("Fetching books...");
       const books = await Book.find({});
-      console.log("Books fetched:", books);
+      // console.log("Books fetched:", books);
       res.status(200).json(books);
     } catch (error) {
       console.error("Error fetching books:", error);
