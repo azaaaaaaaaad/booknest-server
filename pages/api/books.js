@@ -4,7 +4,7 @@ import Book from "../../models/Book";
 
 export default async function handler(req, res) {
   // Run the CORS middleware
-  await corsMiddleware(req, res);
+  await CorsMiddleware(req, res);
 
   // Connect to the database
   try {
